@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>高并发负载均衡 | 心沉则灵</title>
+    <meta name="generator" content="VuePress 1.8.2">
+    <link rel="icon" href="/favicon.ico">
+    <meta name="description" content="学而不思则罔思而不学则殆!">
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
+    
+    <link rel="preload" href="https://cdn.jsdelivr.net/gh/lingener/lingener.github.io/assets/css/0.styles.1ed67386.css" as="style"><link rel="preload" href="https://cdn.jsdelivr.net/gh/lingener/lingener.github.io/assets/js/app.0b21ff5c.js" as="script"><link rel="preload" href="https://cdn.jsdelivr.net/gh/lingener/lingener.github.io/assets/js/5.f8fa3a85.js" as="script"><link rel="preload" href="https://cdn.jsdelivr.net/gh/lingener/lingener.github.io/assets/js/1.46137cce.js" as="script"><link rel="preload" href="https://cdn.jsdelivr.net/gh/lingener/lingener.github.io/assets/js/11.31d5cb55.js" as="script"><link rel="prefetch" href="https://cdn.jsdelivr.net/gh/lingener/lingener.github.io/assets/js/10.7222c760.js"><link rel="prefetch" href="https://cdn.jsdelivr.net/gh/lingener/lingener.github.io/assets/js/12.ac71a866.js"><link rel="prefetch" href="https://cdn.jsdelivr.net/gh/lingener/lingener.github.io/assets/js/13.a4862f8f.js"><link rel="prefetch" href="https://cdn.jsdelivr.net/gh/lingener/lingener.github.io/assets/js/14.7d38783b.js"><link rel="prefetch" href="https://cdn.jsdelivr.net/gh/lingener/lingener.github.io/assets/js/15.edb526f6.js"><link rel="prefetch" href="https://cdn.jsdelivr.net/gh/lingener/lingener.github.io/assets/js/16.ac7c0538.js"><link rel="prefetch" href="https://cdn.jsdelivr.net/gh/lingener/lingener.github.io/assets/js/17.c2f3c82d.js"><link rel="prefetch" href="https://cdn.jsdelivr.net/gh/lingener/lingener.github.io/assets/js/18.2858e484.js"><link rel="prefetch" href="https://cdn.jsdelivr.net/gh/lingener/lingener.github.io/assets/js/19.e3fdb388.js"><link rel="prefetch" href="https://cdn.jsdelivr.net/gh/lingener/lingener.github.io/assets/js/2.f64b1c52.js"><link rel="prefetch" href="https://cdn.jsdelivr.net/gh/lingener/lingener.github.io/assets/js/20.de9181b7.js"><link rel="prefetch" href="https://cdn.jsdelivr.net/gh/lingener/lingener.github.io/assets/js/21.bf18fba2.js"><link rel="prefetch" href="https://cdn.jsdelivr.net/gh/lingener/lingener.github.io/assets/js/22.89ef57ad.js"><link rel="prefetch" href="https://cdn.jsdelivr.net/gh/lingener/lingener.github.io/assets/js/23.d1369dc6.js"><link rel="prefetch" href="https://cdn.jsdelivr.net/gh/lingener/lingener.github.io/assets/js/24.57b2eb10.js"><link rel="prefetch" href="https://cdn.jsdelivr.net/gh/lingener/lingener.github.io/assets/js/25.279be27c.js"><link rel="prefetch" href="https://cdn.jsdelivr.net/gh/lingener/lingener.github.io/assets/js/26.77abaa9b.js"><link rel="prefetch" href="https://cdn.jsdelivr.net/gh/lingener/lingener.github.io/assets/js/27.3ebdd851.js"><link rel="prefetch" href="https://cdn.jsdelivr.net/gh/lingener/lingener.github.io/assets/js/28.3a7441a6.js"><link rel="prefetch" href="https://cdn.jsdelivr.net/gh/lingener/lingener.github.io/assets/js/29.ce0c7ac7.js"><link rel="prefetch" href="https://cdn.jsdelivr.net/gh/lingener/lingener.github.io/assets/js/30.5e1d60b3.js"><link rel="prefetch" href="https://cdn.jsdelivr.net/gh/lingener/lingener.github.io/assets/js/31.8e81922e.js"><link rel="prefetch" href="https://cdn.jsdelivr.net/gh/lingener/lingener.github.io/assets/js/32.f16a296c.js"><link rel="prefetch" href="https://cdn.jsdelivr.net/gh/lingener/lingener.github.io/assets/js/33.6f85c4d6.js"><link rel="prefetch" href="https://cdn.jsdelivr.net/gh/lingener/lingener.github.io/assets/js/34.3e2c1671.js"><link rel="prefetch" href="https://cdn.jsdelivr.net/gh/lingener/lingener.github.io/assets/js/35.08d6b1a5.js"><link rel="prefetch" href="https://cdn.jsdelivr.net/gh/lingener/lingener.github.io/assets/js/36.2338551e.js"><link rel="prefetch" href="https://cdn.jsdelivr.net/gh/lingener/lingener.github.io/assets/js/37.fd9a8698.js"><link rel="prefetch" href="https://cdn.jsdelivr.net/gh/lingener/lingener.github.io/assets/js/38.c9dab7de.js"><link rel="prefetch" href="https://cdn.jsdelivr.net/gh/lingener/lingener.github.io/assets/js/39.ae723246.js"><link rel="prefetch" href="https://cdn.jsdelivr.net/gh/lingener/lingener.github.io/assets/js/40.fbd466bd.js"><link rel="prefetch" href="https://cdn.jsdelivr.net/gh/lingener/lingener.github.io/assets/js/41.89cdf369.js"><link rel="prefetch" href="https://cdn.jsdelivr.net/gh/lingener/lingener.github.io/assets/js/42.b0247ac4.js"><link rel="prefetch" href="https://cdn.jsdelivr.net/gh/lingener/lingener.github.io/assets/js/43.9fb64b72.js"><link rel="prefetch" href="https://cdn.jsdelivr.net/gh/lingener/lingener.github.io/assets/js/44.6d1a088b.js"><link rel="prefetch" href="https://cdn.jsdelivr.net/gh/lingener/lingener.github.io/assets/js/45.333ed046.js"><link rel="prefetch" href="https://cdn.jsdelivr.net/gh/lingener/lingener.github.io/assets/js/46.146a5de6.js"><link rel="prefetch" href="https://cdn.jsdelivr.net/gh/lingener/lingener.github.io/assets/js/47.d3f7b767.js"><link rel="prefetch" href="https://cdn.jsdelivr.net/gh/lingener/lingener.github.io/assets/js/48.a52dcdfb.js"><link rel="prefetch" href="https://cdn.jsdelivr.net/gh/lingener/lingener.github.io/assets/js/49.aa541e45.js"><link rel="prefetch" href="https://cdn.jsdelivr.net/gh/lingener/lingener.github.io/assets/js/6.3bd08025.js"><link rel="prefetch" href="https://cdn.jsdelivr.net/gh/lingener/lingener.github.io/assets/js/7.63cd94b3.js"><link rel="prefetch" href="https://cdn.jsdelivr.net/gh/lingener/lingener.github.io/assets/js/8.3fc861cf.js"><link rel="prefetch" href="https://cdn.jsdelivr.net/gh/lingener/lingener.github.io/assets/js/9.e143e01a.js"><link rel="prefetch" href="https://cdn.jsdelivr.net/gh/lingener/lingener.github.io/assets/js/vendors~flowchart.2b2fbf5d.js">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lingener/lingener.github.io/assets/css/0.styles.1ed67386.css">
+  </head>
+  <body>
+    <div id="app" data-server-rendered="true"><div class="theme-container" data-v-0f44a727><div data-v-0f44a727><div id="loader-wrapper" class="loading-wrapper" data-v-d48f4d20 data-v-0f44a727 data-v-0f44a727><div class="loader-main" data-v-d48f4d20><div data-v-d48f4d20></div><div data-v-d48f4d20></div><div data-v-d48f4d20></div><div data-v-d48f4d20></div></div> <!----> <!----></div> <div class="password-shadow password-wrapper-out" style="display:none;" data-v-355e03f9 data-v-0f44a727 data-v-0f44a727><h3 class="title" data-v-355e03f9 data-v-355e03f9>心沉则灵</h3> <p class="description" data-v-355e03f9 data-v-355e03f9>学而不思则罔思而不学则殆!</p> <label id="box" class="inputBox" data-v-355e03f9 data-v-355e03f9><input type="password" value="" data-v-355e03f9> <span data-v-355e03f9>Konck! Knock!</span> <button data-v-355e03f9>OK</button></label> <div class="footer" data-v-355e03f9 data-v-355e03f9><span data-v-355e03f9><i class="iconfont reco-theme" data-v-355e03f9></i> <a target="blank" href="https://vuepress-theme-reco.recoluan.com" data-v-355e03f9>vuePress-theme-reco</a></span> <span data-v-355e03f9><i class="iconfont reco-copyright" data-v-355e03f9></i> <a data-v-355e03f9><span data-v-355e03f9>Lingener</span>
+            
+          <span data-v-355e03f9>2020 - </span>
+          2021
+        </a></span></div></div> <div class="hide" data-v-0f44a727><header class="navbar" data-v-0f44a727><div class="sidebar-button"><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" viewBox="0 0 448 512" class="icon"><path fill="currentColor" d="M436 124H12c-6.627 0-12-5.373-12-12V80c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12z"></path></svg></div> <a href="/" class="home-link router-link-active"><img src="/logo.png" alt="心沉则灵" class="logo"> <span class="site-name">心沉则灵</span></a> <div class="links"><div class="color-picker"><a class="color-button"><i class="iconfont reco-color"></i></a> <div class="color-picker-menu" style="display:none;"><div class="mode-options"><h4 class="title">Choose mode</h4> <ul class="color-mode-options"><li class="dark">dark</li><li class="auto active">auto</li><li class="light">light</li></ul></div></div></div> <div class="search-box"><i class="iconfont reco-search"></i> <input aria-label="Search" autocomplete="off" spellcheck="false" value=""> <!----></div> <nav class="nav-links can-hide"><div class="nav-item"><a href="/" class="nav-link"><i class="iconfont reco-home"></i>
+  主页
+</a></div><div class="nav-item"><div class="dropdown-wrapper"><a class="dropdown-title"><span class="title"><i class="iconfont reco-category"></i>
+      归档
+    </span> <span class="arrow right"></span></a> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="/categories/Architect/" class="nav-link"><i class="undefined"></i>
+  Architect
+</a></li><li class="dropdown-item"><!----> <a href="/categories/Microservices/" class="nav-link"><i class="undefined"></i>
+  Microservices
+</a></li><li class="dropdown-item"><!----> <a href="/categories/Spring/" class="nav-link"><i class="undefined"></i>
+  Spring
+</a></li><li class="dropdown-item"><!----> <a href="/categories/DB/" class="nav-link"><i class="undefined"></i>
+  DB
+</a></li><li class="dropdown-item"><!----> <a href="/categories/Java/" class="nav-link"><i class="undefined"></i>
+  Java
+</a></li><li class="dropdown-item"><!----> <a href="/categories/Middleware/" class="nav-link"><i class="undefined"></i>
+  Middleware
+</a></li></ul></div></div><div class="nav-item"><a href="/tag/" class="nav-link"><i class="iconfont reco-tag"></i>
+  标签
+</a></div><div class="nav-item"><a href="/timeline/" class="nav-link"><i class="iconfont reco-date"></i>
+  时间轴
+</a></div> <!----></nav></div></header> <div class="sidebar-mask" data-v-0f44a727></div> <aside class="sidebar" data-v-0f44a727><div class="personal-info-wrapper" data-v-5aaeb100 data-v-0f44a727><!----> <h3 class="name" data-v-5aaeb100>
+    Lingener
+  </h3> <div class="num" data-v-5aaeb100><div data-v-5aaeb100><h3 data-v-5aaeb100>36</h3> <h6 data-v-5aaeb100>Articles</h6></div> <div data-v-5aaeb100><h3 data-v-5aaeb100>20</h3> <h6 data-v-5aaeb100>Tags</h6></div></div> <ul class="social-links" data-v-5aaeb100></ul> <hr data-v-5aaeb100></div> <nav class="nav-links"><div class="nav-item"><a href="/" class="nav-link"><i class="iconfont reco-home"></i>
+  主页
+</a></div><div class="nav-item"><div class="dropdown-wrapper"><a class="dropdown-title"><span class="title"><i class="iconfont reco-category"></i>
+      归档
+    </span> <span class="arrow right"></span></a> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="/categories/Architect/" class="nav-link"><i class="undefined"></i>
+  Architect
+</a></li><li class="dropdown-item"><!----> <a href="/categories/Microservices/" class="nav-link"><i class="undefined"></i>
+  Microservices
+</a></li><li class="dropdown-item"><!----> <a href="/categories/Spring/" class="nav-link"><i class="undefined"></i>
+  Spring
+</a></li><li class="dropdown-item"><!----> <a href="/categories/DB/" class="nav-link"><i class="undefined"></i>
+  DB
+</a></li><li class="dropdown-item"><!----> <a href="/categories/Java/" class="nav-link"><i class="undefined"></i>
+  Java
+</a></li><li class="dropdown-item"><!----> <a href="/categories/Middleware/" class="nav-link"><i class="undefined"></i>
+  Middleware
+</a></li></ul></div></div><div class="nav-item"><a href="/tag/" class="nav-link"><i class="iconfont reco-tag"></i>
+  标签
+</a></div><div class="nav-item"><a href="/timeline/" class="nav-link"><i class="iconfont reco-date"></i>
+  时间轴
+</a></div> <!----></nav> <ul class="sidebar-links"><li><section class="sidebar-group collapsable depth-0"><p class="sidebar-heading open"><span>Load Balance</span> <span class="arrow down"></span></p> <ul class="sidebar-links sidebar-group-items"><li><a href="/views/architect/loadbalance/loadbalance.html" aria-current="page" class="active sidebar-link">高并发负载均衡</a></li></ul></section></li></ul> </aside> <div class="password-shadow password-wrapper-in" style="display:none;" data-v-355e03f9 data-v-0f44a727><h3 class="title" data-v-355e03f9 data-v-355e03f9>高并发负载均衡</h3> <!----> <label id="box" class="inputBox" data-v-355e03f9 data-v-355e03f9><input type="password" value="" data-v-355e03f9> <span data-v-355e03f9>Konck! Knock!</span> <button data-v-355e03f9>OK</button></label> <div class="footer" data-v-355e03f9 data-v-355e03f9><span data-v-355e03f9><i class="iconfont reco-theme" data-v-355e03f9></i> <a target="blank" href="https://vuepress-theme-reco.recoluan.com" data-v-355e03f9>vuePress-theme-reco</a></span> <span data-v-355e03f9><i class="iconfont reco-copyright" data-v-355e03f9></i> <a data-v-355e03f9><span data-v-355e03f9>Lingener</span>
+            
+          <span data-v-355e03f9>2020 - </span>
+          2021
+        </a></span></div></div> <div data-v-0f44a727><main class="page"><section><div class="page-title"><h1 class="title">高并发负载均衡</h1> <div data-v-5eef61be><i class="iconfont reco-account" data-v-5eef61be><span data-v-5eef61be>Lingener</span></i> <i class="iconfont reco-date" data-v-5eef61be><span data-v-5eef61be>11/23/2020</span></i> <i class="iconfont reco-eye" data-v-5eef61be><span id="/views/architect/loadbalance/loadbalance.html" data-flag-title="Your Article Title" class="leancloud-visitors" data-v-5eef61be><a class="leancloud-visitors-count" style="font-size:.9rem;font-weight:normal;color:#999;"></a></span></i> <i class="tags iconfont reco-tag" data-v-5eef61be><span class="tag-item" data-v-5eef61be>LVS</span><span class="tag-item" data-v-5eef61be>Keepalived</span></i></div></div> <div class="theme-reco-content content__default"><h1 id="负载均衡"><a href="#负载均衡" class="header-anchor">#</a> 负载均衡</h1> <h2 id="七层负载均衡"><a href="#七层负载均衡" class="header-anchor">#</a> 七层负载均衡</h2> <p>nginx是基于反向代理的负载均衡，做了三次握手</p> <p><img src="https://cdn.jsdelivr.net/gh/lingener/lingener.github.io/assets/img/七层负载均衡网络.a37c2fa9.png" alt="image-20210629141110991"></p> <h2 id="四层负载均衡"><a href="#四层负载均衡" class="header-anchor">#</a> 四层负载均衡</h2> <p>请求到达传输控制层的时候只是看了一下端口号，做数据包转发，并没有走三次握手</p> <p><img src="https://cdn.jsdelivr.net/gh/lingener/lingener.github.io/assets/img/四层负载均衡网络.fbd92668.png" alt="image-20210628152920340"></p> <p><img src="https://cdn.jsdelivr.net/gh/lingener/lingener.github.io/assets/img/负载均衡拓扑图.397647db.png" alt="image-20210628233401765"></p> <h2 id="负载均衡的模式"><a href="#负载均衡的模式" class="header-anchor">#</a> 负载均衡的模式</h2> <h3 id="d-nat-目标地址转换"><a href="#d-nat-目标地址转换" class="header-anchor">#</a> D-NAT（目标地址转换）</h3> <p><img src="https://cdn.jsdelivr.net/gh/lingener/lingener.github.io/assets/img/D-NAT.d72e965c.png" alt="image-20210628230346601"></p> <ul><li>非对称的
+<ul><li>发送数据包小，回复的数据包大</li></ul></li></ul> <h3 id="dr-直接路由模式"><a href="#dr-直接路由模式" class="header-anchor">#</a> DR（直接路由模式）</h3> <p><img src="https://cdn.jsdelivr.net/gh/lingener/lingener.github.io/assets/img/DR.9c82fb4a.png" alt="image-20210628231108849"></p> <ul><li><p><strong>如何隐藏VIP</strong></p> <p><img src="https://cdn.jsdelivr.net/gh/lingener/lingener.github.io/assets/img/隐藏VIP.e1d180fd.png" alt="image-20210629003028772"></p> <p>对外隐藏，对内可见</p> <p>kernel parameter:
+目标mac地址为全F，交换机触发广播
+/proc/sys/net/ipv4/conf/<em>IF</em>/
+arp_ignore: 定义接收到ARP请求时的响应级别；
+0：只要本地配置的有相应地址，就给予响应；
+1：仅在请求的目标(MAC)地址配置请求
+到达的接口上的时候，才给予响应；</p> <p>arp_announce：定义将自己地址向外通告时的通告级别；
+0：将本地任何接口上的任何地址向外通告；
+1：试图仅向目标网络通告与其网络匹配的地址；
+2：仅向与本地接口上地址匹配的网络进行通告；</p></li></ul> <h3 id="tun-隧道技术"><a href="#tun-隧道技术" class="header-anchor">#</a> TUN（隧道技术 ）</h3> <p><img src="https://cdn.jsdelivr.net/gh/lingener/lingener.github.io/assets/img/TUN隧道模式.e652a841.png" alt="image-20210628234002218"></p> <ul><li>DIP-&gt;RIP数据包背上CIP-&gt;VIP</li> <li>VPN</li></ul> <h1 id="lvs"><a href="#lvs" class="header-anchor">#</a> LVS</h1> <p>Linux内核集成了LVS叫ipvs模块，管理程序ipvsadmin</p> <h2 id="调度算法"><a href="#调度算法" class="header-anchor">#</a> 调度算法</h2> <h3 id="静态调度方法"><a href="#静态调度方法" class="header-anchor">#</a> 静态调度方法</h3> <ul><li><p>rr</p> <p>轮循</p></li> <li><p>wrr</p> <p>加权轮询，根据权重轮询</p></li> <li><p>dh:</p></li> <li><p>sh:</p></li></ul> <h3 id="动态调度方法"><a href="#动态调度方法" class="header-anchor">#</a> 动态调度方法</h3> <ul><li><p>lc: 最少连接</p></li> <li><p>wlc: 加权最少连接</p></li> <li><p>sed: 最短期望延迟</p></li> <li><p>nq: never queue</p></li> <li><p>LBLC: 基于本地的最少连接</p></li> <li><p>DH:</p></li> <li><p>LBLCR: 基于本地的带复制功能的最少连接</p></li></ul> <h3 id="如何知道哪个负载机负载了多少"><a href="#如何知道哪个负载机负载了多少" class="header-anchor">#</a> 如何知道哪个负载机负载了多少？</h3> <p>偷窥——只看不动手</p> <p>偷窥握手和分手包信息，对负载机的负载进行管理</p> <h2 id="lvs搭建"><a href="#lvs搭建" class="header-anchor">#</a> LVS搭建</h2> <ul><li><p>安装管理程序</p> <div class="language-shell line-numbers-mode"><pre class="language-shell"><code>yum <span class="token function">install</span> ipvsadmin -y
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br></div></div></li></ul> <h2 id="lvs配置"><a href="#lvs配置" class="header-anchor">#</a> LVS配置</h2> <ul><li><p>管理集群服务</p> <ul><li>添加：-A -t|u|f service-address [-s scheduler]
+-t: TCP协议的集群
+-u: UDP协议的集群
+service-address:   IP:PORT
+-f: FWM: 防火墙标记
+service-address: Mark Number</li> <li>修改：-E</li> <li>删除：-D -t|u|f service-address</li></ul> <div class="language- line-numbers-mode"><pre class="language-text"><code>ipvsadm -A -t 192.168.9.100:80 -s rr
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br></div></div></li> <li><p>管理集群服务中的RS</p> <ul><li><p>添加：-a -t|u|f service-address -r server-address [-g|i|m] [-w weight]
+-t|u|f service-address：事先定义好的某集群服务
+-r server-address: 某RS的地址，在NAT模型中，可使用IP：PORT实现端口映射；</p> <p>[-g|i|m] : LVS类型</p> <p>-g: DR
+-i: TUN
+-m: NAT</p> <p>[ -w weight] 定义服务器权重</p> <div class="language- line-numbers-mode"><pre class="language-text"><code>ipvsadm -a -t 172.16.100.1:80 -r 192.168.10.8 –g
+ipvsadm -a -t 172.16.100.1:80 -r 192.168.10.9 -g
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br></div></div></li> <li><p>修改：-e</p></li> <li><p>删除：-d -t|u|f service-address -r server-address</p></li> <li><p>查看
+-L|l
+-n: 数字格式显示主机地址和端口
+--stats：统计数据
+--rate: 速率
+--timeout: 显示tcp、tcpfin和udp的会话超时时长
+-:c 显示当前的ipvs连接状况</p></li> <li><p>删除所有集群服务
+-C：清空ipvs规则</p></li> <li><p>保存规则
+-S</p> <div class="language- line-numbers-mode"><pre class="language-text"><code>ipvsadm -S &gt; /path/to/somefile
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br></div></div></li> <li><p>载入此前的规则：
+-R</p> <div class="language- line-numbers-mode"><pre class="language-text"><code>ipvsadm -R &lt; /path/form/somefile
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br></div></div></li></ul></li></ul> <h2 id="lvs实验"><a href="#lvs实验" class="header-anchor">#</a> LVS实验</h2> <h3 id="拓扑图"><a href="#拓扑图" class="header-anchor">#</a> 拓扑图</h3> <p><img src="https://cdn.jsdelivr.net/gh/lingener/lingener.github.io/assets/img/LVS实验模型.656e048d.png" alt="image-20210629103629542"></p> <h3 id="配置网络"><a href="#配置网络" class="header-anchor">#</a> 配置网络</h3> <ul><li><p>node01</p> <div class="language- line-numbers-mode"><pre class="language-text"><code>ifconfig eth0:8 192.168.150.100/24
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br></div></div></li></ul> <ul><li><p>node02 &amp; node03</p> <ul><li><p>修改内核协议</p> <div class="language- line-numbers-mode"><pre class="language-text"><code>cd /proc/sys/net/ipv4/conf/
+cd eth0
+echo 1 &gt; arp_ignore
+echo 2 &gt; arp_annonce
+cd ../all
+echo 1 &gt; arp_ignore
+echo 2 &gt; arp_annonce
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br></div></div></li> <li><p>设置隐藏的vip</p> <div class="language- line-numbers-mode"><pre class="language-text"><code>ifconfig lo2 192.168.150.100 netmark **255.255.255.255**
+#ifconfig lo2 down
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br></div></div></li></ul></li></ul> <h3 id="安装启动服务"><a href="#安装启动服务" class="header-anchor">#</a> 安装启动服务</h3> <ul><li><p>node02~node03:</p> <div class="language- line-numbers-mode"><pre class="language-text"><code>yum install httpd -y
+service httpd start
+vi   /var/www/html/index.html
+# from 192.168.150.1x
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br></div></div></li></ul> <h3 id="lvs服务配置"><a href="#lvs服务配置" class="header-anchor">#</a> LVS服务配置</h3> <ul><li><p>node01:</p> <div class="language- line-numbers-mode"><pre class="language-text"><code>yum install ipvsadm
+ipvsadm -A  -t  192.168.150.100:80  -s rr
+ipvsadm -a  -t 192.168.150.100:80  -r  192.168.150.12 -g -w 1
+ipvsadm -a  -t 192.168.150.100:80  -r  192.168.150.13 -g -w 1
+ipvsadm -ln
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br></div></div></li></ul> <h3 id="验证"><a href="#验证" class="header-anchor">#</a> 验证</h3> <p>​	浏览器访问  192.168.150.100   看到负载  疯狂F5
+​	node01：
+​		netstat -natp   结论看不到socket连接
+​	node02~node03:
+​		netstat -natp   结论看到很多的socket连接
+​	node01:
+​		ipvsadm -lnc    查看偷窥记录本
+​		TCP 00:57  FIN_WAIT    192.168.150.1:51587 192.168.150.100:80 192.168.150.12:80
+​		FIN_WAIT： 连接过，偷窥了所有的包
+​		SYN_RECV： 基本上lvs都记录了，证明lvs没事，一定是后边网络层出问题</p> <h1 id="高用用"><a href="#高用用" class="header-anchor">#</a> 高用用</h1> <h2 id="故障点"><a href="#故障点" class="header-anchor">#</a> 故障点</h2> <h3 id="lvs单点问题"><a href="#lvs单点问题" class="header-anchor">#</a> lvs单点问题</h3> <ul><li><p>影响</p> <p>业务下线</p></li> <li><p>解决</p> <hr> <ul><li></li></ul></li></ul> <h3 id="rs-real-server-故障"><a href="#rs-real-server-故障" class="header-anchor">#</a> RS（Real Server）故障</h3> <ul><li><p>影响</p> <p>部分部分用户请求异常，lvs还存有这个rs的负载记录</p></li> <li><p>如何判断故障</p> <p>访问一下，返回200 ok ，底层验证的是应用层的http协议</p></li></ul> <h2 id="解决方案分析"><a href="#解决方案分析" class="header-anchor">#</a> 解决方案分析</h2> <ul><li><p>单点问题</p> <p>一变多</p> <ul><li><p>主备</p> <p>如何判断主挂了？</p> <ul><li>方向性
+<ul><li>主定时广播</li> <li>备定时询问</li></ul></li> <li>效率性
+<ul><li>定义判断条件</li></ul></li></ul></li> <li><p>主主</p></li></ul> <p>实现</p> <ul><li><p>修改源码加逻辑</p></li> <li><p>第三方</p> <ul><li><p>人定期观察</p> <p>不可靠</p> <p>企业追求自动化，把人解耦</p></li> <li><p>程序实现HA</p> <p>keeplived</p></li></ul></li></ul></li> <li><p>RS故障</p></li></ul> <h2 id="keepalived"><a href="#keepalived" class="header-anchor">#</a> keepalived</h2> <h3 id="职责"><a href="#职责" class="header-anchor">#</a> 职责</h3> <ul><li>监控自己的服务</li> <li>Master通告自己还活着，backup监听master状态，Master挂了，一堆backup推举出新的Master</li> <li>配置，ip添加ipvs，keepalived是有配置文件的</li> <li>对后端Server做健康检查</li></ul> <h3 id="实验"><a href="#实验" class="header-anchor">#</a> 实验</h3> <p>主机： node01~node04</p> <ul><li><p>node01:</p> <div class="language-shell line-numbers-mode"><pre class="language-shell"><code>ipvsadm -C
+<span class="token function">ifconfig</span> eth0:8 down
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br></div></div></li></ul> <hr> <ul><li><p>node01,node04:</p> <ul><li>安装程序</li></ul> <div class="language- line-numbers-mode"><pre class="language-text"><code>yum install keepalived ipvsadm -y
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br></div></div><ul><li><p>配置：</p> <div class="language- line-numbers-mode"><pre class="language-text"><code>cd  /etc/keepalived/
+cp keepalived.conf keepalived.conf.bak
+vi keepalived.conf
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br></div></div><ul><li><p>node01:
+vrrp：虚拟路由冗余协议！</p> <div class="language- line-numbers-mode"><pre class="language-text"><code>vrrp_instance VI_1 {
+	state MASTER         // node04  BACKUP
+	interface eth0       // 企业中一般会加多块网卡，用于传输不同的数据
+	virtual_router_id 51
+	priority 100		 //	 权重node04	 50
+	advert_int 1
+	authentication {
+		auth_type PASS
+		auth_pass 1111
+	}
+	virtual_ipaddress {
+		192.168.150.100/24 dev eth0 label  eth0:3
+	}
+}
+virtual_server 192.168.150.100 80 {
+	delay_loop 6
+	lb_algo rr
+	lb_kind DR
+	nat_mask 255.255.255.0
+	persistence_timeout 0   // session的时间，生产环境中需要设置一个合适值
+	protocol TCP
+
+	real_server 192.168.150.12 80 {
+		weight 1
+		HTTP_GET {
+			url {
+				path /
+				status_code 200
+			}
+			connect_timeout 3
+			nb_get_retry 3
+			delay_before_retry 3
+		}
+	}
+	real_server 192.168.150.13 80 {
+		weight 1
+		HTTP_GET {
+			url {
+				path /
+				status_code 200
+			}
+			connect_timeout 3
+			nb_get_retry 3
+			delay_before_retry 3
+		}
+	}
+}
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br><span class="line-number">15</span><br><span class="line-number">16</span><br><span class="line-number">17</span><br><span class="line-number">18</span><br><span class="line-number">19</span><br><span class="line-number">20</span><br><span class="line-number">21</span><br><span class="line-number">22</span><br><span class="line-number">23</span><br><span class="line-number">24</span><br><span class="line-number">25</span><br><span class="line-number">26</span><br><span class="line-number">27</span><br><span class="line-number">28</span><br><span class="line-number">29</span><br><span class="line-number">30</span><br><span class="line-number">31</span><br><span class="line-number">32</span><br><span class="line-number">33</span><br><span class="line-number">34</span><br><span class="line-number">35</span><br><span class="line-number">36</span><br><span class="line-number">37</span><br><span class="line-number">38</span><br><span class="line-number">39</span><br><span class="line-number">40</span><br><span class="line-number">41</span><br><span class="line-number">42</span><br><span class="line-number">43</span><br><span class="line-number">44</span><br><span class="line-number">45</span><br><span class="line-number">46</span><br><span class="line-number">47</span><br></div></div><p>​	scp  ./keepalived.conf  root@node04:<code>pwd</code></p></li></ul></li> <li><p>启动</p> <p>service keepalived start</p></li></ul></li></ul> <h3 id="特点"><a href="#特点" class="header-anchor">#</a> 特点</h3> <ul><li><p>Master挂掉恢复之后会抢回主</p></li> <li><p>RS故障恢复之后</p> <p>keepalived能自动检查到并恢复提供服务</p></li> <li><p>keepalived启动之后有三个keepalived进程</p> <p>主进程：广播自己还活着</p> <p>另外两个子进程：做RS的健康检查</p></li> <li><p>杀死keepalived进程</p> <p>造成两个lvs主机都配置了VIP，从到导致客户端数据包出现紊乱，握手包或者分手包可能会负载给不同的RS，破坏了原子性。出现不能建立连接或者丢包。</p> <p>为了解决上面的问题引入了一个不可靠的keepalived，出现了新的问题</p></li></ul></div></section> <footer class="page-edit"><!----> <!----></footer> <!----> <div class="comments-wrapper" style="display:none;"><!----></div> <ul class="side-bar sub-sidebar-wrapper" style="width:12rem;" data-v-898d6c54><li class="level-2" data-v-898d6c54><a href="/views/architect/loadbalance/loadbalance.html#七层负载均衡" class="sidebar-link reco-side-七层负载均衡" data-v-898d6c54>七层负载均衡</a></li><li class="level-2" data-v-898d6c54><a href="/views/architect/loadbalance/loadbalance.html#四层负载均衡" class="sidebar-link reco-side-四层负载均衡" data-v-898d6c54>四层负载均衡</a></li><li class="level-2" data-v-898d6c54><a href="/views/architect/loadbalance/loadbalance.html#负载均衡的模式" class="sidebar-link reco-side-负载均衡的模式" data-v-898d6c54>负载均衡的模式</a></li><li class="level-3" data-v-898d6c54><a href="/views/architect/loadbalance/loadbalance.html#d-nat-目标地址转换" class="sidebar-link reco-side-d-nat-目标地址转换" data-v-898d6c54>D-NAT（目标地址转换）</a></li><li class="level-3" data-v-898d6c54><a href="/views/architect/loadbalance/loadbalance.html#dr-直接路由模式" class="sidebar-link reco-side-dr-直接路由模式" data-v-898d6c54>DR（直接路由模式）</a></li><li class="level-3" data-v-898d6c54><a href="/views/architect/loadbalance/loadbalance.html#tun-隧道技术" class="sidebar-link reco-side-tun-隧道技术" data-v-898d6c54>TUN（隧道技术 ）</a></li><li class="level-2" data-v-898d6c54><a href="/views/architect/loadbalance/loadbalance.html#调度算法" class="sidebar-link reco-side-调度算法" data-v-898d6c54>调度算法</a></li><li class="level-3" data-v-898d6c54><a href="/views/architect/loadbalance/loadbalance.html#静态调度方法" class="sidebar-link reco-side-静态调度方法" data-v-898d6c54>静态调度方法</a></li><li class="level-3" data-v-898d6c54><a href="/views/architect/loadbalance/loadbalance.html#动态调度方法" class="sidebar-link reco-side-动态调度方法" data-v-898d6c54>动态调度方法</a></li><li class="level-3" data-v-898d6c54><a href="/views/architect/loadbalance/loadbalance.html#如何知道哪个负载机负载了多少" class="sidebar-link reco-side-如何知道哪个负载机负载了多少" data-v-898d6c54>如何知道哪个负载机负载了多少？</a></li><li class="level-2" data-v-898d6c54><a href="/views/architect/loadbalance/loadbalance.html#lvs搭建" class="sidebar-link reco-side-lvs搭建" data-v-898d6c54>LVS搭建</a></li><li class="level-2" data-v-898d6c54><a href="/views/architect/loadbalance/loadbalance.html#lvs配置" class="sidebar-link reco-side-lvs配置" data-v-898d6c54>LVS配置</a></li><li class="level-2" data-v-898d6c54><a href="/views/architect/loadbalance/loadbalance.html#lvs实验" class="sidebar-link reco-side-lvs实验" data-v-898d6c54>LVS实验</a></li><li class="level-3" data-v-898d6c54><a href="/views/architect/loadbalance/loadbalance.html#拓扑图" class="sidebar-link reco-side-拓扑图" data-v-898d6c54>拓扑图</a></li><li class="level-3" data-v-898d6c54><a href="/views/architect/loadbalance/loadbalance.html#配置网络" class="sidebar-link reco-side-配置网络" data-v-898d6c54>配置网络</a></li><li class="level-3" data-v-898d6c54><a href="/views/architect/loadbalance/loadbalance.html#安装启动服务" class="sidebar-link reco-side-安装启动服务" data-v-898d6c54>安装启动服务</a></li><li class="level-3" data-v-898d6c54><a href="/views/architect/loadbalance/loadbalance.html#lvs服务配置" class="sidebar-link reco-side-lvs服务配置" data-v-898d6c54>LVS服务配置</a></li><li class="level-3" data-v-898d6c54><a href="/views/architect/loadbalance/loadbalance.html#验证" class="sidebar-link reco-side-验证" data-v-898d6c54>验证</a></li><li class="level-2" data-v-898d6c54><a href="/views/architect/loadbalance/loadbalance.html#故障点" class="sidebar-link reco-side-故障点" data-v-898d6c54>故障点</a></li><li class="level-3" data-v-898d6c54><a href="/views/architect/loadbalance/loadbalance.html#lvs单点问题" class="sidebar-link reco-side-lvs单点问题" data-v-898d6c54>lvs单点问题</a></li><li class="level-3" data-v-898d6c54><a href="/views/architect/loadbalance/loadbalance.html#rs-real-server-故障" class="sidebar-link reco-side-rs-real-server-故障" data-v-898d6c54>RS（Real Server）故障</a></li><li class="level-2" data-v-898d6c54><a href="/views/architect/loadbalance/loadbalance.html#解决方案分析" class="sidebar-link reco-side-解决方案分析" data-v-898d6c54>解决方案分析</a></li><li class="level-2" data-v-898d6c54><a href="/views/architect/loadbalance/loadbalance.html#keepalived" class="sidebar-link reco-side-keepalived" data-v-898d6c54>keepalived</a></li><li class="level-3" data-v-898d6c54><a href="/views/architect/loadbalance/loadbalance.html#职责" class="sidebar-link reco-side-职责" data-v-898d6c54>职责</a></li><li class="level-3" data-v-898d6c54><a href="/views/architect/loadbalance/loadbalance.html#实验" class="sidebar-link reco-side-实验" data-v-898d6c54>实验</a></li><li class="level-3" data-v-898d6c54><a href="/views/architect/loadbalance/loadbalance.html#特点" class="sidebar-link reco-side-特点" data-v-898d6c54>特点</a></li></ul></main> <!----></div></div></div></div><div class="global-ui"><div class="back-to-ceiling" style="right:1rem;bottom:6rem;width:2.5rem;height:2.5rem;border-radius:.25rem;line-height:2.5rem;display:none;" data-v-c6073ba8 data-v-c6073ba8><svg t="1574745035067" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="5404" class="icon" data-v-c6073ba8><path d="M526.60727968 10.90185116a27.675 27.675 0 0 0-29.21455937 0c-131.36607665 82.28402758-218.69155461 228.01873535-218.69155402 394.07834331a462.20625001 462.20625001 0 0 0 5.36959153 69.94390903c1.00431239 6.55289093-0.34802892 13.13561351-3.76865779 18.80351572-32.63518765 54.11355614-51.75690182 118.55860487-51.7569018 187.94566865a371.06718723 371.06718723 0 0 0 11.50484808 91.98906777c6.53300375 25.50556257 41.68394495 28.14064038 52.69160883 4.22606766 17.37162448-37.73630017 42.14135425-72.50938081 72.80769204-103.21549295 2.18761121 3.04276886 4.15646224 6.24463696 6.40373557 9.22774369a1871.4375 1871.4375 0 0 0 140.04691725 5.34970492 1866.36093723 1866.36093723 0 0 0 140.04691723-5.34970492c2.24727335-2.98310674 4.21612437-6.18497483 6.3937923-9.2178004 30.66633723 30.70611158 55.4360664 65.4791928 72.80769147 103.21549355 11.00766384 23.91457269 46.15860503 21.27949489 52.69160879-4.22606768a371.15156223 371.15156223 0 0 0 11.514792-91.99901164c0-69.36717486-19.13165746-133.82216804-51.75690182-187.92578088-3.42062944-5.66790279-4.76302748-12.26056868-3.76865837-18.80351632a462.20625001 462.20625001 0 0 0 5.36959269-69.943909c-0.00994388-166.08943902-87.32547796-311.81420293-218.6915546-394.09823051zM605.93803103 357.87693858a93.93749974 93.93749974 0 1 1-187.89594924 6.1e-7 93.93749974 93.93749974 0 0 1 187.89594924-6.1e-7z" p-id="5405" data-v-c6073ba8></path><path d="M429.50777625 765.63860547C429.50777625 803.39355007 466.44236686 1000.39046097 512.00932183 1000.39046097c45.56695499 0 82.4922232-197.00623328 82.5015456-234.7518555 0-37.75494459-36.9345906-68.35043303-82.4922232-68.34111062-45.57627738-0.00932239-82.52019037 30.59548842-82.51086798 68.34111062z" p-id="5406" data-v-c6073ba8></path></svg></div><canvas id="vuepress-canvas-cursor"></canvas><APlayer audio="" fixed="true" mini="true" autoplay="autoplay" theme="#3eaf7c" loop="loop" order="random" preload="auto" volume="0.2" mutex="true" lrc-type="0" list-folded="true" list-max-height="250" storage-name="vuepress-plugin-meting" id="aplayer-fixed"></APlayer></div></div>
+    <script src="https://cdn.jsdelivr.net/gh/lingener/lingener.github.io/assets/js/app.0b21ff5c.js" defer></script><script src="https://cdn.jsdelivr.net/gh/lingener/lingener.github.io/assets/js/5.f8fa3a85.js" defer></script><script src="https://cdn.jsdelivr.net/gh/lingener/lingener.github.io/assets/js/1.46137cce.js" defer></script><script src="https://cdn.jsdelivr.net/gh/lingener/lingener.github.io/assets/js/11.31d5cb55.js" defer></script>
+  </body>
+</html>
